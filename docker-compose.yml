@@ -24,6 +24,7 @@ services:
       - ./uploads:/ai-infra-guard/uploads
     networks:
       - ai-infra-guard-network
+    restart: always
     healthcheck:
       test: [ "CMD", "curl",  "http://localhost:8088/" ]
       interval: 30s
@@ -44,6 +45,7 @@ services:
       - OPENAI_BASE_URL=https://api.openai.com/v1
     networks:
       - ai-infra-guard-network
+    restart: always
     depends_on:
       webserver:
         condition: service_healthy

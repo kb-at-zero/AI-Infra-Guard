@@ -170,7 +170,8 @@ func (r *Runner) initFingerprints() error {
 		gologger.Fatalf("没有指定指纹模板")
 	}
 	r.fpEngine = preload.New(r.hp, fps)
-	text := fmt.Sprintf("加载指纹库,数量:%d", len(fps)+len(preload.CollectedFpReqs()))
+	//text := fmt.Sprintf("加载指纹库,数量:%d", len(fps)+len(preload.CollectedFpReqs()))
+	text := fmt.Sprintf("Loading fingerprints:%d", len(fps)+len(preload.CollectedFpReqs()))
 	gologger.Infoln(text)
 	if r.Options.Callback != nil {
 		r.Options.Callback(Step01{Text: text})
@@ -384,7 +385,10 @@ func (r *Runner) runHostRequest(domain string) error {
 retry:
 	fullUrl := fmt.Sprintf("%s://%s", protocol, domain)
 	timeStart := time.Now()
-	resp, err := r.hp.Get(fullUrl, nil)
+	headers := map[string]string{
+		"tr": "a2802f09d2ddb7830a6f4b00910ab4f0",
+	}
+	resp, err := r.hp.Get(fullUrl, headers)
 	if err != nil {
 		if !retried {
 			if protocol == httpx.HTTP {
@@ -404,11 +408,15 @@ retry:
 // runDomainRequest makes a request to a specific URL and processes the response
 func (r *Runner) runDomainRequest(fullUrl string) error {
 	timeStart := time.Now()
-	resp, err := r.hp.Get(fullUrl, nil)
+	reqUrl := fullUrl
+	headers := map[string]string{
+		"tr": "a2802f09d2ddb7830a6f4b00910ab4f0",
+	}
+	resp, err := r.hp.Get(reqUrl, headers)
 	if err != nil {
 		return err
 	}
-	r.extractContent(fullUrl, resp, time.Since(timeStart).String())
+	r.extractContent(reqUrl, resp, time.Since(timeStart).String())
 	return nil
 }
 
@@ -646,6 +654,7 @@ func (r *Runner) GetFpAndVulList() []FpInfos {
 		fp2 := fp
 		fingerprints = append(fingerprints, fp2)
 	}
+
 	fps := make([]FpInfos, 0)
 	for _, fp := range fingerprints {
 		ads, err := r.advEngine.GetAdvisories(fp.Info.Name, "", false)
@@ -699,7 +708,8 @@ func (r *Runner) initVulnerabilityDB() error {
 		gologger.Fatalf("无法初始化漏洞库:%s", err)
 	}
 	r.advEngine = engine
-	text := fmt.Sprintf("加载漏洞版本库,数量:%d", r.advEngine.GetCount())
+	// Load vulnerability version database
+	text := fmt.Sprintf("Loading vulnerability database, count:%d", r.advEngine.GetCount())
 	gologger.Infoln(text)
 	if r.Options.Callback != nil {
 		r.Options.Callback(Step01{Text: text})

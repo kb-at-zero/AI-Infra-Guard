@@ -99,8 +99,8 @@ func (tm *TaskManager) AddTask(req *TaskCreateRequest, traceID string) error {
 
 	log.Infof("任务预存成功: trace_id=%s, sessionId=%s", traceID, req.SessionID)
 
-	// 3. 等待SSE连接建立（30秒超时）
-	timeout := 10 * time.Second
+	// 3. 等待SSE连接建立
+	timeout := 100 * time.Second
 	start := time.Now()
 	for time.Since(start) < timeout {
 		if tm.sseManager.HasConnection(req.SessionID) {
@@ -131,6 +131,78 @@ func (tm *TaskManager) AddTask(req *TaskCreateRequest, traceID string) error {
 	}
 
 	log.Infof("任务添加成功: trace_id=%s, sessionId=%s, taskType=%s", traceID, req.SessionID, req.Task)
+	return nil
+}
+
+// 一键添加任务并执行
+func (tm *TaskManager) AddTaskApi(req *TaskCreateRequest) error {
+	// 1. 先检查数据库中是否已存在相同的sessionId
+	existingSession, err := tm.taskStore.GetSession(req.SessionID)
+	if err == nil && existingSession != nil {
+		return fmt.Errorf("任务已存在，sessionId: %s", req.SessionID)
+	}
+
+	// 2. 预存任务到数据库（状态为todo，assigned_agent为空）
+	session := &database.Session{
+		ID:             req.SessionID,
+		Username:       req.Username,
+		Title:          tm.generateTaskTitle(req),
+		TaskType:       req.Task,
+		Content:        req.Content,
+		Params:         mustMarshalJSON(req.Params),
+		Attachments:    mustMarshalJSON(req.Attachments),
+		Status:         TaskStatusTodo,
+		AssignedAgent:  "", // 预存时为空
+		CountryIsoCode: req.CountryIsoCode,
+		Share:          true,
+	}
+	err = tm.taskStore.CreateSession(session)
+	if err != nil {
+		return fmt.Errorf("预存任务失败: %v", err)
+	}
+
+	// 获取可用 Agent（简化：不做额外健康检查）
+	availableAgents := tm.agentManager.GetAvailableAgents()
+	if len(availableAgents) == 0 {
+		return fmt.Errorf("没有可用的Agent")
+	}
+
+	// 3. 选择 Agent（简单策略：选择第一个，相信GetAvailableAgents的过滤结果）
+	selectedAgent := availableAgents[0]
+
+	// 4. 更新session的assigned_agent和开始时间
+	err = tm.taskStore.UpdateSessionAssignedAgent(req.SessionID, selectedAgent.agentID)
+	if err != nil {
+		return fmt.Errorf("无法更新session的assigned_agent")
+	}
+
+	// 6. 构造任务分配消息
+	taskMsg := WSMessage{
+		Type: WSMsgTypeTaskAssign,
+		Content: TaskContent{
+			SessionID:      req.SessionID,
+			TaskType:       req.Task,
+			Content:        req.Content,
+			Params:         req.Params,
+			Attachments:    req.Attachments,
+			Timeout:        3600,
+			CountryIsoCode: req.CountryIsoCode,
+		},
+	}
+
+	// 7. 直接发送给 Agent（简化：无重试，无额外健康检查）
+	selectedAgent.stateMu.RLock()
+	agentID := selectedAgent.agentID
+	selectedAgent.stateMu.RUnlock()
+
+	// 设置写超时并直接发送
+	selectedAgent.conn.SetWriteDeadline(time.Now().Add(writeWait))
+	err = selectedAgent.conn.WriteJSON(taskMsg)
+	if err != nil {
+		return fmt.Errorf("下发任务给 %s 失败: %v", agentID, err)
+	}
+
+	log.Infof("任务分发成功:  sessionId=%s, agentId=%s", req.SessionID, agentID)
 	return nil
 }
 
@@ -217,6 +289,7 @@ func (tm *TaskManager) dispatchTask(sessionId string, traceID string) error {
 			Model:   model.ModelName,
 			Token:   model.Token,
 			BaseUrl: model.BaseURL,
+			Limit:   model.Limit,
 		}
 		return &p, nil
 	}
@@ -868,6 +941,40 @@ func (tm *TaskManager) SearchUserTasksSimple(username string, searchParams datab
 func (tm *TaskManager) generateTaskTitle(req *TaskCreateRequest) string {
 	ret := ""
 	var ModelName = ""
+	language := req.CountryIsoCode
+	if language == "" {
+		language = "zh"
+	}
+
+	// 定义语言相关的文本
+	var texts struct {
+		// 任务类型标题
+		aiInfraScan, mcpScan, modelJailbreak, modelRedteamReport, otherTask string
+		// 其他文本
+		model, prompt, github, sse string
+	}
+
+	if language == "en" {
+		texts.aiInfraScan = "AI Infra Scan - "
+		texts.mcpScan = "MCP Scan - "
+		texts.modelJailbreak = "LLM Jailbreaking - "
+		texts.modelRedteamReport = "Jailbreak Evaluation - "
+		texts.otherTask = "Other Task - "
+		texts.model = "Model:"
+		texts.prompt = "Prompt:"
+		texts.github = "Github:"
+		texts.sse = "SSE:"
+	} else {
+		texts.aiInfraScan = "AI基础设施扫描 - "
+		texts.mcpScan = "MCP扫描 - "
+		texts.modelJailbreak = "一键越狱任务 - "
+		texts.modelRedteamReport = "大模型安全体检 - "
+		texts.otherTask = "其他任务 - "
+		texts.model = "模型:"
+		texts.prompt = "prompt:"
+		texts.github = "Github:"
+		texts.sse = "SSE:"
+	}
 	if modelID, exists := req.Params["model_id"]; exists {
 		switch v := modelID.(type) {
 		case string:
@@ -896,7 +1003,7 @@ func (tm *TaskManager) generateTaskTitle(req *TaskCreateRequest) string {
 	// 4. 一键越狱：模型名+prompt
 	switch req.Task {
 	case agent.TaskTypeAIInfraScan:
-		ret = "AI基础设施扫描 - "
+		ret = texts.aiInfraScan
 		if len(req.Attachments) > 0 && req.Attachments[0] != "" {
 			ret += tm.extractFileNameFromURL(req.Attachments[0])
 		}
@@ -904,21 +1011,21 @@ func (tm *TaskManager) generateTaskTitle(req *TaskCreateRequest) string {
 			ret += req.Content
 		}
 	case agent.TaskTypeMcpScan:
-		ret = "MCP扫描 - "
+		ret = texts.mcpScan
 		if len(req.Attachments) > 0 && req.Attachments[0] != "" {
 			// 直接调用现有的extractFileNameFromURL方法
 			ret += tm.extractFileNameFromURL(req.Attachments[0])
 		} else if strings.Contains(req.Content, "github.com") {
-			ret += "Github:" + tm.extractFileNameFromURL(req.Content)
+			ret += texts.github + tm.extractFileNameFromURL(req.Content)
 		} else {
-			ret += "SSE:" + req.Content
+			ret += texts.sse + req.Content
 		}
 	case agent.TaskTypeModelJailbreak:
-		ret = "一键越狱任务 - " + fmt.Sprintf("模型:%s, prompt:%s", ModelName, req.Content)
+		ret = texts.modelJailbreak + fmt.Sprintf("%s%s, %s%s", texts.model, ModelName, texts.prompt, req.Content)
 	case agent.TaskTypeModelRedteamReport:
-		ret = "大模型安全体检 - " + ModelName
+		ret = texts.modelRedteamReport + ModelName
 	default:
-		ret = "其他任务 - " + req.Content
+		ret = texts.otherTask + req.Content
 	}
 	// 如果content为空，尝试从附件中提取第一个URL的文件名作为title
 	return ret

@@ -17,8 +17,6 @@ import (
 const (
 	DIR  = "/app/AIG-PromptSecurity"
 	NAME = "/usr/local/bin/uv"
-	//DIR  = "/Users/python/Downloads/AIG-PromptSecurity"
-	//NAME = "/Users/python/.local/bin/uv"
 )
 
 type ModelRedteamReport struct {
@@ -29,6 +27,7 @@ type ModelParams struct {
 	BaseUrl string `json:"base_url"`
 	Token   string `json:"token"`
 	Model   string `json:"model"`
+	Limit   int    `json:"limit"`
 }
 
 func getDefaultEvalModel() (*ModelParams, error) {
@@ -42,6 +41,7 @@ func getDefaultEvalModel() (*ModelParams, error) {
 		BaseUrl: baseUrl,
 		Token:   token,
 		Model:   model,
+		Limit:   1000,
 	}, nil
 }
 
@@ -95,9 +95,13 @@ func (m *ModelRedteamReport) Execute(ctx context.Context, request TaskRequest, c
 	argv = append(argv, "--async_mode")
 
 	for _, model := range param.Model {
+		if model.Limit == 0 {
+			model.Limit = 1000
+		}
 		argv = append(argv, "--model", model.Model)
 		argv = append(argv, "--base_url", model.BaseUrl)
 		argv = append(argv, "--api_key", model.Token)
+		argv = append(argv, "--max_concurrent", fmt.Sprintf("%d", model.Limit))
 	}
 
 	evalParams, err := getDefaultEvalModel()
@@ -117,7 +121,7 @@ func (m *ModelRedteamReport) Execute(ctx context.Context, request TaskRequest, c
 	argv = append(argv, "--scenarios")
 
 	if len(request.Attachments) > 0 {
-		tempDir := "temp_uploads"
+		tempDir := "uploads"
 		if err := os.MkdirAll(tempDir, 0755); err != nil {
 			gologger.Errorf("创建临时目录失败: %v", err)
 			return err
@@ -237,9 +241,13 @@ func (m *ModelJailbreak) Execute(ctx context.Context, request TaskRequest, callb
 	argv = append(argv, "run", "cli_run.py", "--async_mode")
 
 	for _, model := range param.Model {
+		if model.Limit == 0 {
+			model.Limit = 1000
+		}
 		argv = append(argv, "--model", model.Model)
 		argv = append(argv, "--base_url", model.BaseUrl)
 		argv = append(argv, "--api_key", model.Token)
+		argv = append(argv, "--max_concurrent", fmt.Sprintf("%d", model.Limit))
 	}
 
 	evalParams, err := getDefaultEvalModel()

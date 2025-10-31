@@ -1,86 +1,100 @@
-
 <p align="center">
-    <h1 align="center">🛡️ A.I.G (AI-Infra-Guard)</h1>
+    <h1 align="center"><img vertical-align="middle" width="400px" src="img/logo-full-new.png" alt="A.I.G"/></h1>
 </p>
+<h4 align="center">
+    <p>
+        <a href="https://tencent.github.io/AI-Infra-Guard/">Documentation</a> |
+        <a href="#">中文</a> |
+        <a href="./README.md">English</a>
+    <p>
+</h4>
 <p align="center">
     <a href="https://github.com/Tencent/AI-Infra-Guard">
         <img alt="GitHub Stars" src="https://img.shields.io/github/stars/Tencent/AI-Infra-Guard?color=gold">
     </a>
     <a href="https://github.com/Tencent/AI-Infra-Guard">
-        <img alt="License" src="https://img.shields.io/badge/license-MIT-blue">
+        <img alt="GitHub downloads" src="https://img.shields.io/github/downloads/Tencent/AI-Infra-Guard/total">
+    </a>
+    <a href="https://github.com/Tencent/AI-Infra-Guard">
+        <img alt="docker pulls" src="https://img.shields.io/docker/pulls/zhuquelab/aig-server.svg?color=gold">
     </a>
     <a href="https://github.com/Tencent/AI-Infra-Guard">
         <img alt="Release" src="https://img.shields.io/github/v/release/Tencent/AI-Infra-Guard?color=green">
     </a>
+    <a href="https://deepwiki.com/Tencent/AI-Infra-Guard">
+       <img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki">
+    </a>
 </p>
-<h4 align="center">
-    <p>
-        <a href="https://tencent.github.io/AI-Infra-Guard/">帮助文档</a> |
-        <a href="#">中文</a> |
-        <a href="./README.md">English</a>
-    <p>
-</h4>
+<p align="center">
+  <a href="https://trendshift.io/repositories/13637" target="_blank"><img src="https://trendshift.io/api/badge/repositories/13637" alt="Tencent%2FAI-Infra-Guard | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+  <a href="https://www.blackhat.com/eu-25/arsenal/schedule/index.html#aigai-infra-guard-48381" target="_blank"><img src="img/blackhat.png" alt="Tencent%2FAI-Infra-Guard | blackhat" style="width: 175px; height: 55px;" width="175" height="55"/></a>
+  <a href="https://github.com/deepseek-ai/awesome-deepseek-integration" target="_blank"><img src="img/awesome-deepseek.png" alt="Tencent%2FAI-Infra-Guard | awesome-deepseek-integration" style="width: 273px; height: 55px;" width="273" height="55"/></a>
+</p>
 
+<br>
 <p align="center">
     <h3 align="center">🚀 腾讯朱雀实验室推出的一站式 AI 红队安全测试平台</h3>
 </p>
 
-
-
-
 **A.I.G (AI-Infra-Guard)** 集成AI基础设施漏洞扫描、MCP Server风险检测与大模型安全体检等能力，旨在为用户提供最全面、智能与易用的AI安全风险自查解决方案。
 
+<p>
+  我们致力于将A.I.G(AI-Infra-Guard)打造为业界领先的 AI 红队工具平台。更多的 Star 能让这个项目被更多人看到，吸引更多的开发者参与进来，从而让项目更快地迭代和完善。您的 Star 对我们至关重要！
+</p>
+<p align="center">
+  <a href="https://github.com/Tencent/AI-Infra-Guard">
+      <img src="https://img.shields.io/badge/⭐-点亮Star-yellow?style=for-the-badge&logo=github" alt="点亮Star">
+  </a>
+</p>
 
 ## 目录
-- [✨ 核心功能](#-核心功能)
+- [✨ 功能特性](#-功能特性)
 - [🖼️ 功能展示](#-功能展示)
 - [🚀 快速开始](#-快速开始)
-- [🙏 贡献指南](#-贡献指南)
+- [📖 用户指南](#-用户指南)
+- [🔧 API文档](#-api文档)
+- [📝 贡献指南](#-贡献指南)
+- [🙏 致谢](#-致谢)
 - [💬 加入社区](#-加入社区)
+- [📖 引用](#-引用)
+- [📚 相关论文](#-相关论文)
 - [📄 开源协议](#-开源协议)
 
 
-## ✨ 核心功能
+## ✨ 功能特性
 
-<table>
-  <tr>
-    <td>
-      <h3>🔍 AI 基础设施漏洞扫描</h3>
-      <p>精准识别 <b>30+</b> AI 框架组件<br/>覆盖 <b>近400个</b> 已知 CVE 漏洞<br/>如 Ollama、ComfyUI、vLLM 等</p>
-    </td>
-    <td>
-      <h3>🤖 MCP Server 安全检测</h3>
-      <p>基于AI Agent驱动<br />检测 <b>9 大类</b>MCP安全风险<br/>支持<b>源代码/远程URL</b>扫描</p>
-    </td>
-    <td>
-      <h3>⚡ 大模型安全体检</h3>
-      <p>快速评估Prompt安全风险<br/>内置多个精选越狱评测集<br/>快速获取大模型安全体检报告</p>
-    </td>
-  </tr>
-</table>
+
+| 特性 | 详细信息 |
+|:--------|:------------|
+| **AI基础设施漏洞扫描** | 精准识别30+AI框架组件，覆盖近400个已知CVE漏洞，包括Ollama/ComfyUI/vLLM等 |
+| **MCP Server风险检测** | 基于AI Agent驱动，检测9大类MCP安全风险，支持源代码/远程URL扫描 |
+| **大模型安全体检** | 快速评估Prompt安全风险，内置多个精选越狱评估数据集，跨模型安全性能对比 |
+| **直观的Web界面** | 现代化、用户友好的Web UI，一键扫描实时进度跟踪，全面的结果分析报告 |
+| **便捷的API** | 提供完整的接口文档和Swagger规范，更方便集成 |
+| **多语言支持** | 拥有中英文界面，本地化帮助文档 |
+| **跨平台兼容** | 支持Linux、macOS和Windows，基于Docker部署 |
+| **免费且MIT开源** | 完全免费使用，MIT开源协议 |
+
+
+
 <br />
 
 ## 🖼️ 功能展示
 
 ### A.I.G 主界面
-![AIG首页](img/background.png)
+![AIG主界面](img/background.png)
 
-### AI 基础设施漏洞扫描
+### AI基础设施漏洞扫描
 ![一键扫描发现 AI 组件安全漏洞](img/ai-infra-scan.png)
 
-### MCP Server 安全检测
-![智能分析 MCP Server 安全风险](img/mcp-server.png)
+### MCP Server风险检测
+![智能分析MCP Server安全风险](img/mcp-server.png)
 
 ### 大模型安全体检
-![全面评估大模型安全性](img/model-security.png)
+![全面评估LLM安全性](img/model-security.png)
 
 ### 插件管理
-<table>
-  <tr>
-    <td valign="top"><img align=top src="img/plugin-1.png"/></td>
-    <td valign="top"><img align=top src="img/plugin-2.png"/></td>
-  </tr>
-</table>
+![插件管理](img/plugin-zh.gif)
 
 <br />
 
@@ -89,42 +103,56 @@
 
 **系统要求**
 
-- Docker 20.10 或更高版本
-- 至少 4GB 可用内存
-- 至少 10GB 可用磁盘空间
+| Docker | 内存 | 磁盘空间 |
+|--------|------|----------|
+| 20.10 或更高 | 4GB+ | 10GB+ |
 
-首先，克隆本项目：
+
+**1. 一键安装脚本（推荐）**
+```bash
+# 此方法会自动帮您安装docker并一键启动A.I.G
+curl https://raw.githubusercontent.com/Tencent/AI-Infra-Guard/refs/heads/main/docker.sh | bash
+```
+
+**2. 使用预构建镜像运行 (推荐)**
 ```bash
 git clone https://github.com/Tencent/AI-Infra-Guard.git
 cd AI-Infra-Guard
-```
-
-然后安装好[Docker相关环境](https://docs.docker.com/get-started/get-docker/)，您可以选择以下任一方式部署A.I.G服务：
-
-**1. 使用预构建镜像运行 (推荐)**
-```bash
 # 此方法会从 Docker Hub 拉取预构建的镜像，启动速度更快
 docker-compose -f docker-compose.images.yml up -d
 ```
-**2. 从源码构建并运行**
+
+**3. 从源码构建并运行**
 ```bash
+git clone https://github.com/Tencent/AI-Infra-Guard.git
+cd AI-Infra-Guard
 # 此方法会使用本地代码构建 Docker 镜像并启动服务
 docker-compose up -d
 ```
 
-服务启动后，即可访问A.I.G的 Web 界面：
+服务启动后，您可以通过以下地址访问A.I.G的Web界面：
 `http://localhost:8088`
+<br><br>
 
-**目录说明**
+注意: AI-Infra-Guard项目定位于企业或个人在内部使用的AI安全风险平台，暂无鉴权认证机制,请勿在公网中部署使用。
 
-| 目录/文件      | 说明               | 挂载路径                      |
-|------------|------------------|---------------------------|
-| `uploads/` | 上传文件存储目录         | `/ai-infra-guard/uploads` |
-| `db/`      | 数据库文件目录          | `/ai-infra-guard/db`      |
-| `data/`    | 知识库数据目录（指纹库、漏洞库） | `/ai-infra-guard/data`    |
-| `logs/`    | 应用日志目录           | `/ai-infra-guard/logs`    |
+## 📖 用户指南
 
+访问我们的在线文档：[https://tencent.github.io/AI-Infra-Guard/](https://tencent.github.io/AI-Infra-Guard/)
+
+更多详细的常见问题解答和故障排除指南，请访问我们的[文档](https://tencent.github.io/AI-Infra-Guard/?menu=faq)。
 <br />
+<br>
+
+## 🔧 API文档
+
+A.I.G 提供了一套创建任务相关的API接口，支持AI基础设施扫描、MCP安全扫描和大模型安全体检功能。
+
+项目运行后访问 `http://localhost:8088/docs/index.html` 可查看完整的API文档
+
+详细的API使用说明、参数说明和完整示例代码，请查看 [完整API文档](./api_zh.md)。
+<br />
+<br>
 
 ## 📝 贡献指南
 
@@ -139,41 +167,117 @@ A.I.G 的核心能力之一就是其丰富且可快速配置的插件系统。�
 请参考现有规则格式，创建新文件并通过 Pull Request 提交。
 
 ### 其他贡献方式
-- 🐛 [报告 Bug](https://github.com/Tencent/AI-Infra-Guard/issues)
-- 💡 [提出新功能](https://github.com/Tencent/AI-Infra-Guard/issues)
+- 🐛 [报告Bug](https://github.com/Tencent/AI-Infra-Guard/issues)
+- 💡 [建议新功能](https://github.com/Tencent/AI-Infra-Guard/issues)
 - ⭐ [改进文档](https://github.com/Tencent/AI-Infra-Guard/pulls)
-  <br />
+<br />
+<br />
 
 ## 🙏 致谢
-
-感谢以下安全团队的专业共建:
-<table>
+### 👥 感谢以下团队与开发者的专业共建与代码贡献
+<br />
+<table style="border: none; border-collapse: inherit;">
   <tr>
-    <td width="33%"><img src="img/keen_lab_logo.svg" alt="Keen Lab"></td>
-    <td width="33%"><img src="img/wechat_security.png" alt="WeChat Security"></td>
-    <td width="33%"><img src="img/fit_sec_logo.png" alt="Fit Security"></td>
+    <td width="33%" style="border: none;"><img src="img/keen_lab_logo.svg" alt="Keen Lab" height="85%"></td>
+    <td width="33%" style="border: none;"><img src="img/wechat_security.png" alt="WeChat Security" height="85%"></td>
+    <td width="33%" style="border: none;"><img src="img/fit_sec_logo.png" alt="Fit Security" height="85%"></td>
   </tr>
 </table>
-
-<br>
-
-感谢为 A.I.G 项目贡献代码的开发者：
-
 <a href="https://github.com/Tencent/AI-Infra-Guard/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Tencent/AI-Infra-Guard" />
 </a>
+<br>
+<br>
 
+### 🤝 感谢以下使用A.I.G的企业与团队用户
+
+<br>
+<div align="center">
+<img src="img/tencent.png" alt="Tencent" height="30px">
+<img src="img/deepseek.png" alt="DeepSeek" height="38px">
+</div>
+
+<br>
+<br>
+
+### 🌟 感谢A.I.G项目所有的支持者
+
+<div align="center">
+  <img src="img/stargazers.png" alt="Stargazers" width="100%">
+</div>
+感谢来自<strong>微软、谷歌、亚马逊、字节跳动、阿里巴巴、华为、美团、豆瓣、北京大学、清华大学、合肥工业大学、成都信息工程大学</strong>等公司与学校的用户的Star！
+<br>
+<br>
+<p align="center">
+  ⭐ 每一个Star都激励我们持续改进和创新！ ⭐
+</p>
+<p align="center">
+  <a href="https://github.com/Tencent/AI-Infra-Guard">
+      <img src="https://img.shields.io/badge/⭐-点亮Star-yellow?style=for-the-badge&amp;logo=github" alt="点亮Star">
+  </a>
+</p>
 <br>
 
 ## 💬 加入社区
 
-<div>
-  <img src="img/wechatgroup.png" alt="微信群" width="200">
-  <p><b>微信扫码加入 A.I.G 交流群</b></p>
-</div>
-如您有合作需求或问题反馈，可以通过以下邮箱联系我们: zhuque(at)tencent.com
+### 🌐 在线讨论
+- **GitHub讨论**：[加入我们的社区讨论](https://github.com/Tencent/AI-Infra-Guard/discussions)
+- **问题与Bug报告**：[报告问题或建议功能](https://github.com/Tencent/AI-Infra-Guard/issues)
 
-<br><br>
+### 📱 讨论社群
+<table>
+  <thead>
+  <tr>
+    <th>微信群</th>
+    <th>Discord <a href="https://discord.gg/U9dnPnyadZ">[链接]</a></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><img src="img/wechatgroup.png" alt="微信群" width="200"></td>
+    <td><img src="img/discord.png" alt="discord" width="200"></td>
+  </tr>
+  </tbody>
+</table>
+
+### 📧 联系我们
+如有合作咨询或反馈，请联系我们：zhuque@tencent.com
+
+
+
+
+<br>
+<br>
+
+## 📖 引用
+
+如果您在研究或产品中使用了A.I.G，请使用以下引用：
+
+```bibtex
+@misc{Tencent_AI-Infra-Guard_2025,
+  author={{Tencent Zhuque Lab}},
+  title={{AI-Infra-Guard: A Comprehensive, Intelligent, and Easy-to-Use AI Red Teaming Platform}},
+  year={2025},
+  howpublished={GitHub repository},
+  url={https://github.com/Tencent/AI-Infra-Guard}
+}
+```
+<br>
+
+## 📚 相关论文
+
+我们深深感谢在学术工作中使用A.I.G，并为推进AI安全研究做出贡献的团队：
+
+[1] Yongjian Guo, Puzhuo Liu, et al. **"Systematic Analysis of MCP Security."** arXiv preprint arXiv:2508.12538 (2025). [[pdf]](https://arxiv.org/abs/2508.12538)  
+[2] Zexin Wang, Jingjing Li, et al. **"A Survey on AgentOps: Categorization, Challenges, and Future Directions."** arXiv preprint arXiv:2508.02121 (2025). [[pdf]](https://arxiv.org/abs/2508.02121)  
+[3] Yixuan Yang, Daoyuan Wu, Yufan Chen. **"MCPSecBench: A Systematic Security Benchmark and Playground for Testing Model Context Protocols."** arXiv preprint arXiv:2508.13220 (2025). [[pdf]](https://arxiv.org/abs/2508.13220)  
+[4] Ping He, Changjiang Li, et al. **"Automatic Red Teaming LLM-based Agents with Model Context Protocol Tools."** arXiv preprint arXiv:2509.21011 (2025). [[pdf]](https://arxiv.org/abs/2509.21011)  
+[5] Weibo Zhao, Jiahao Liu, Bonan Ruan et al. **"When MCP Servers Attack: Taxonomy, Feasibility, and Mitigation."** arXiv preprint arXiv:2509.24272v1 (2025). [[pdf]](http://arxiv.org/abs/2509.24272v1)  
+[6] Bin Wang, Zexin Liu, Hao Yu et al. **"MCPGuard : Automatically Detecting Vulnerabilities in MCP Servers."** arXiv preprint arXiv:22510.23673v1 (2025). [[pdf]](http://arxiv.org/abs/2510.23673v1)  
+
+📧 如果您在研究中使用了A.I.G，请联系我们，让更多人看到您的研究！
+<br>
+<br>
 
 ## 📄 开源协议
 
@@ -182,5 +286,3 @@ A.I.G 的核心能力之一就是其丰富且可快速配置的插件系统。�
 <div>
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Tencent/AI-Infra-Guard&type=Date)](https://star-history.com/#Tencent/AI-Infra-Guard&Date)
-
-</div>
